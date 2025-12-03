@@ -1,43 +1,106 @@
-## cc-key.sh 使用说明
+# CCK - Claude Code Key Manager
 
-### 概述
+> 轻松管理多个 Anthropic API 密钥并启动 Claude CLI。
 
-`cc-key.sh` 是一个统一的 Claude API Key 管理与切换脚本，支持 `list`、`add`、`current`、`remove`、`use` 五个子命令。
+## 特性
 
-依赖与存储：
-- 依赖：`bash`、`python3`、同目录的 `json-helper.py`
-- 存储：`~/.claude/claude-api-project-keys.json`
-- 切换：更新 `~/.claude/settings.json` 的 `env` 中 `ANTHROPIC_AUTH_TOKEN` 与可选 `ANTHROPIC_BASE_URL`
+- 🔐 **安全的密钥管理** - 安全存储多个 API 密钥
+- 🎯 **智能选择** - 使用 fzf 或备用 UI 进行交互式密钥选择
+- 🚀 **无缝 CLI 启动** - 透明的 Claude CLI 集成
+- 💾 **智能缓存** - 记住最后使用的密钥
+- 🎨 **美观的界面** - 彩色、直观的命令行界面
+- ⚙️ **可配置** - 通过 `~/.cckrc` 自定义行为
 
-### 安装
-
-```bash
-chmod +x ./cc-key.sh
-```
-
-### 基本用法
+## 安装
 
 ```bash
-# 列出所有 Key（掩码显示，标注默认）
-./cc-key.sh list
-
-# 交互式添加 Key（名称、Key、Base URL、备注）
-./cc-key.sh add
-
-# 查看当前默认 Key 信息
-./cc-key.sh current
-
-# 删除指定 Key
-./cc-key.sh remove <name>
-
-# 切换到指定或默认 Key，并更新 ~/.claude/settings.json
-./cc-key.sh use [name]
+npm install -g @todrfu/cck
 ```
 
-### 注意事项
+或使用 pnpm：
 
-- 首次运行会在家目录创建 `~/.claude/claude-api-project-keys.json`（权限 600）。
-- 执行 `use` 时会自动备份 `~/.claude/settings.json` 为 `settings.json.backup`。
-- 切换后需退出并重启 `claude` 命令使配置生效。
+```bash
+pnpm add -g @todrfu/cck
+```
 
+## 快速开始
 
+```bash
+# 添加你的第一个 API 密钥
+cck add
+
+# 启动 Claude CLI（交互式密钥选择）
+cck
+
+# 列出所有密钥
+cck list
+```
+
+## 使用说明
+
+### 管理命令
+
+```bash
+# 列出所有 API 密钥
+cck list
+cck ls
+
+cck list -f # 显示完整密钥，请注意保护隐私
+
+# 添加新的 API 密钥
+cck add
+
+# 删除 API 密钥
+cck remove <key-name>
+cck rm <key-name>
+
+# 显示当前默认密钥
+cck current
+
+# 切换默认密钥
+cck use <key-name>
+
+# 显示帮助
+cck help
+```
+
+### 启动 Claude CLI
+
+```bash
+# 交互式密钥选择
+cck
+
+# 使用默认密钥
+cck --use-default
+
+# 使用指定密钥
+cck --key <key-name>
+
+# 传递参数给 Claude CLI
+cck -r                    # 重置会话
+cck --verbose             # 详细输出
+cck -r --verbose          # 组合参数
+
+# 混合 CCK 和 Claude 选项
+cck --key prod -r --verbose
+```
+
+## 配置
+
+创建 `~/.cckrc` 文件来自定义行为：
+
+```json
+{
+  "version": "1.0.0",
+  "keysFile": "~/.cck/keys.json",
+  "cacheFile": "~/.cck/cache",
+  "logLevel": "info",
+  "selector": {
+    "type": "fzf",
+    "fallback": "builtin"
+  },
+  "display": {
+    "colorEnabled": true
+  }
+}
+```

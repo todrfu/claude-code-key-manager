@@ -1,0 +1,56 @@
+{
+  "name": "@otdrfu/cck",
+  "version": "0.4.0",
+  "description": "Claude Code Key Manager - Seamlessly manage multiple Anthropic API keys and launch Claude CLI",
+  "type": "module",
+  "bin": {
+    "cck": "bin/cck.js"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "scripts"
+  ],
+  "scripts": {
+    "build": "tsup && chmod +x bin/cck.js",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "vitest run tests/e2e",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "postinstall": "node scripts/postinstall.js",
+    "prepublishOnly": "npm run build && npm run lint"
+  },
+  "keywords": [
+    "claude",
+    "anthropic",
+    "api-key",
+    "cli",
+    "key-manager",
+    "claude-code"
+  ],
+  "author": "todrfu",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/todrfu/claude-code-key-manager.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "peerDependencies": {
+    "@anthropic-ai/claude-code": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^1.0.4"
+  }
+}
